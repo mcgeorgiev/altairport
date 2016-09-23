@@ -1,0 +1,87 @@
+JSON = [
+{
+    "meta":
+    {
+        "entry":
+        {
+            "source":
+            {
+                "data": "STD",
+                "type": "airport_code",
+                "lat": 111,
+                "lon": 111
+            },
+            "destination":
+            {
+                "data": "SSH",
+                "type": "airport_code",
+                "lat": 111,
+                "lon": 111
+            },
+        "travel_distance":
+        {
+            "source": 0,
+            "dest": 0
+        }
+        }
+    },
+    "routes":
+        [{
+            "source":
+            {
+                "lat": 51.148101806640625,
+                "distance": 0.8508101110192781, //should be in miles/km
+                "iata": u"LGW",
+                "lon": -0.19027799367904663,
+                "name": u"London Gatwick Airport"
+            },
+            "destination":
+            {
+                "lat": 27.178300857543945,
+                "distance": 0.9965641832420931,
+                "iata": u"HRG",
+                "lon": 33.799400329589844,
+                "name": u"Hurghada International Airport"
+            },
+            "airline":
+            {
+                "code": u"TCX",
+                "name": "Empty"
+            }
+        },
+        {
+            "source":
+            {
+                "lat": 51.148101806640625,
+                "distance": 0.8508101110192781,
+                "iata": u"LGW",
+                "lon": -0.19027799367904663,
+                "name": u"London Gatwick Airport"
+            },
+            "destination":
+            {
+                "lat": 27.178300857543945,
+                "distance": 0.9965641832420931,
+                "iata": u"HRG",
+                "lon": 33.799400329589844,
+                "name": u"Hurghada International Airport"
+            },
+            "airline":
+            {
+                "code": u"TCX",
+                "name": "Empty"
+            }
+        }]
+
+    }]
+
+    j = [{
+        "meta":
+        {
+            "entry":
+            {
+                "source": None,
+                "dest": None}
+            },
+            "travel_distance": None
+        }]
