@@ -16,7 +16,7 @@ def get_lat_lon(iata_code):
             FROM airports
             WHERE iata_code = ?
         """, iata)
-    return db.fetchall()[0]
+    return db.fetchall()
 
 
 def get_near_airports(lat, lon):
@@ -106,41 +106,45 @@ def create_json(source, source_lat, source_lon, dest, dest_lat, dest_lon, valid_
     return {"meta": meta, "routes": valid_routes}
 
 
-def main():
+def get_routes(input):
     # get lat lon by whatever means
-    source_entry = 'STN'
-    source_lat, source_lon = get_lat_lon(source_entry)
+    source_entry = input['source']
+    # source_lat, source_lon = get_lat_lon(source_entry)
+    import sqlite3
+    db = sqlite3.connect('airportdata.db')
+    cur = db.cursor()
+    cur.execute("select * from airports limit 2")
+    print cur.fetchall()
+    db.close()
+    # # get close airports
+    # source_airports = format_airports(get_near_airports(source_lat, source_lon))
 
-    # get close airports
-    source_airports = format_airports(get_near_airports(source_lat, source_lon))
-
-    # order them
-    nearest_source = get_k_nearest_neighbour((source_lat,source_lon), source_airports)
-
-
-    # get lat lon by whatever means
-    dest_entry = 'SSH'
-    dest_lat, dest_lon = get_lat_lon(dest_entry)
-
-    # get close airports
-    dest_airports = format_airports(get_near_airports(dest_lat, dest_lon))
-
-    # order them
-    nearest_dest = get_k_nearest_neighbour((dest_lat,dest_lon), dest_airports)
+    # # order them
+    # nearest_source = get_k_nearest_neighbour((source_lat,source_lon), source_airports)
 
 
-    # check if routes between them exist
-    source_iata_list = [source['iata'] for source in nearest_source]
-    dest_iata_list = [dest['iata'] for dest in nearest_dest]
-    valid_routes_codes = check_routes(source_iata_list, dest_iata_list)
+    # # get lat lon by whatever means
+    # dest_entry = input['distance']
+    # dest_lat, dest_lon = get_lat_lon(dest_entry)
 
-    # verify_routes
-    valid_routes = verify_routes(valid_routes_codes, nearest_source, nearest_dest)
+    # # get close airports
+    # dest_airports = format_airports(get_near_airports(dest_lat, dest_lon))
 
-    # create json
-    json_dict = create_json(source_entry, source_lat, source_lon, dest_entry, dest_lat, dest_lon, valid_routes)
-    JSON = json.dumps(json_dict)
-    print JSON
+    # # order them
+    # nearest_dest = get_k_nearest_neighbour((dest_lat,dest_lon), dest_airports)
 
 
-main()
+    # # check if routes between them exist
+    # source_iata_list = [source['iata'] for source in nearest_source]
+    # dest_iata_list = [dest['iata'] for dest in nearest_dest]
+    # valid_routes_codes = check_routes(source_iata_list, dest_iata_list)
+
+    # # verify_routes
+    # valid_routes = verify_routes(valid_routes_codes, nearest_source, nearest_dest)
+
+    # # create json
+    # json_dict = create_json(source_entry, source_lat, source_lon, dest_entry, dest_lat, dest_lon, valid_routes)
+    # JSON = json.dumps(json_dict)
+    JSON = {"stuck": "here"}
+    return JSON
+
