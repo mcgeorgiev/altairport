@@ -23,9 +23,11 @@ class Connection(object):
 
     def __enter__(self):
         self.conn = sqlite3.connect(self.db_name)
+        print "*&*&*&*&*&*&*&*& ->>connection is open"
         return self.conn
 
     def __exit__(self, type, value, traceback):
+        print "*&*&*&*&*&*&*&*& ->>connection is closed"
         self.conn.close()
 
 

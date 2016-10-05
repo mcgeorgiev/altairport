@@ -70,27 +70,12 @@ def get_k_nearest_neighbour(test, train, k=999):
 
 
 def check_routes(source, dest):
-    def log_and_execute(cursor, sql, *args):
-        print sql
-        s = sql
-        if len(args) > 0:
-            # generates SELECT quote(?), quote(?), ...
-            cursor.execute("SELECT " + ", ".join(["quote(?)" for i in args]), args)
-            quoted_values = cursor.fetchone()
-            for quoted_value in quoted_values:
-                s = s.replace('?', quoted_value, 1)
-        print "SQL command: " + s
-        cursor.execute(sql, args)
-
     with Connection() as conn:
         cur = conn.cursor()
-        query = "select airline, source_airport, destination_airport from routes where source_airport in (" + ",".join("?"*len(source)) + ") and destination_airport in (" + ",".join("?"*len(dest)) + ")"
-        log_and_execute(cur, query, (source + dest))
-        cur.execute(
-            "select airline, source_airport, destination_airport from routes where source_airport in (" + ",".join("?"*len(source)) + ") and destination_airport in (" + ",".join("?"*len(dest)) + ")", (source + dest))
-        data =  cur.fetchall()
-    return data
-
+        cur.execute("select airline, source_airport, destination_airport from routes where source_airport in (" + ",".join("?"*len(source)) + ") and destination_airport in (" + ",".join("?"*len(dest)) + ")", (source + dest))
+        return cur.fetchall()
+        
+  
 
 def verify_routes(valid_routes, nearest_source, nearest_dest):
     json_routes = []
@@ -152,14 +137,16 @@ def get_routes(input):
     # check if routes between them exist
     source_iata_list = [source['iata'] for source in nearest_source]
     dest_iata_list = [dest['iata'] for dest in nearest_dest]
+    
     valid_routes_codes = check_routes(source_iata_list, dest_iata_list)
-    print '**********'
-    print valid_routes_codes
+    
     # verify_routes
     valid_routes = verify_routes(valid_routes_codes, nearest_source, nearest_dest)
 
     # create json
     json_dict = create_json(source_entry, source_lat, source_lon, dest_entry, dest_lat, dest_lon, valid_routes)
+    print json_dict
     JSON = json.dumps(json_dict)
+    print type(JSON)
     return JSON
 
