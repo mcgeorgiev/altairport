@@ -74,8 +74,8 @@ def check_routes(source, dest):
         cur = conn.cursor()
         cur.execute("select airline, source_airport, destination_airport from routes where source_airport in (" + ",".join("?"*len(source)) + ") and destination_airport in (" + ",".join("?"*len(dest)) + ")", (source + dest))
         return cur.fetchall()
-        
-  
+
+
 
 def verify_routes(valid_routes, nearest_source, nearest_dest):
     json_routes = []
@@ -137,16 +137,14 @@ def get_routes(input):
     # check if routes between them exist
     source_iata_list = [source['iata'] for source in nearest_source]
     dest_iata_list = [dest['iata'] for dest in nearest_dest]
-    
+
     valid_routes_codes = check_routes(source_iata_list, dest_iata_list)
-    
+
     # verify_routes
     valid_routes = verify_routes(valid_routes_codes, nearest_source, nearest_dest)
 
     # create json
-    json_dict = create_json(source_entry, source_lat, source_lon, dest_entry, dest_lat, dest_lon, valid_routes)
-    print json_dict
-    JSON = json.dumps(json_dict)
-    print type(JSON)
+    JSON = create_json(source_entry, source_lat, source_lon, dest_entry, dest_lat, dest_lon, valid_routes)
+
     return JSON
 
